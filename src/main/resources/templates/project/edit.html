@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="fragments/header :: head"></head>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+
+	<div class="wrapper">
+
+		<nav
+			class="main-header navbar navbar-expand navbar-white navbar-light"
+			th:replace="fragments/header :: navheader"></nav>
+
+		<aside class="main-sidebar sidebar-dark-primary elevation-4"
+			th:replace="fragments/header :: sidebar"></aside>
+
+		<!-- Main content -->
+		<!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0 text-dark">Projects</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Edit project</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    <div class="content">
+    
+		<section class="content">
+			<div class="container-fluid">
+				<!-- Small boxes (Stat box) -->
+				<div class="row">
+					
+					<form th:action="@{/project/edit}" id="prjForm">
+						<input type="hidden" name="id" id="id">
+					</form>
+					<div class="col-12">
+						<div class="card">
+							<div class="card-header">
+								<h3 class="card-title" th:text="'Edit project ['+${project.projectId}+']'">...</h3>
+							</div>
+							<!-- /.card-header -->
+							<div class="card-body">
+																
+<form action="#" th:action="@{/project/update}" th:object="${project}" method="post">
+	<input type="hidden" th:field="*{projectId}" id="id">
+	
+    <div class="form-group">
+    	<label for="name">Name</label>
+    	<input type="text" th:field="*{name}" id="name" placeholder="Name">
+    	<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+    </div>
+    <div class="form-group">
+	    <label for="description">Description</label>
+	    <input type="text" th:field="*{description}" id="email" placeholder="Description">
+	    <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+	</div>
+	<div class="form-group">
+	    <label for="status">Status</label>
+	    <select th:field="*{status}" id="status">
+	    	<option value="true">true</option>
+	    	<option value="false">false</option>
+	    </select>
+	    <span th:if="${#fields.hasErrors('status')}" th:errors="*{status}"></span>
+	</div>
+    <div class="form-group">
+    	<input type="submit" value="Update project">
+    </div>   
+</form>
+   
+<script type="text/javascript">
+edit = function (id) {
+	$("#id").val(id);
+	$("#prjForm").submit();
+}
+</script>
+								
+							</div>
+							<!-- /.card-body -->
+						</div>
+						<!-- /.card -->
+					</div>
+					<!-- /.col -->
+				</div>
+				<!-- /.row -->
+			</div>
+		</section>
+
+	</div>
+	</div>
+	</div>
+
+	<footer class="main-footer" th:replace="fragments/footer :: footer"></footer>
+  
+  	<div th:replace="fragments/footer :: jsfoot"></div>
+
+
+<script type="text/javascript">
+
+
+</script>
+</body>
+</html>

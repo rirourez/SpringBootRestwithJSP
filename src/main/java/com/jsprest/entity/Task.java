@@ -4,15 +4,20 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+
+import java.io.Serializable;
 import java.time.LocalDate;
 
 
 @Entity
-public class Task {
+@Table(name="tasks")
+public class Task implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long taskId;
 
 
@@ -37,8 +42,19 @@ public class Task {
     @Lob
     private String description;
 
+    @ManyToOne
+    @JoinColumn(name="project_id", nullable=false)
+    private Project project;
 
-    public Long getTaskId() {
+    public Project getProject() {
+		return project;
+	}
+
+	public void setProject(Project project) {
+		this.project = project;
+	}
+
+	public Long getTaskId() {
         return taskId;
     }
 

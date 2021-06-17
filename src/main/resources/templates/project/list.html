@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="fragments/header :: head"></head>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+
+	<div class="wrapper">
+
+		<nav
+			class="main-header navbar navbar-expand navbar-white navbar-light"
+			th:replace="fragments/header :: navheader"></nav>
+
+		<aside class="main-sidebar sidebar-dark-primary elevation-4"
+			th:replace="fragments/header :: sidebar"></aside>
+
+		<!-- Main content -->
+		<!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0 text-dark">Projects</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Projects</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    <div class="content">
+    
+		<section class="content">
+			<div class="container-fluid">
+				<!-- Small boxes (Stat box) -->
+				<div class="row">
+					
+					<form th:action="@{/project/view}" id="prjForm">
+						<input type="hidden" name="id" id="id">
+					</form>
+					<div class="col-12">
+						<div class="card">
+							<div class="card-header">
+								<h3 class="card-title">List projects</h3>
+								<a th:href="@{/project/add}">
+								<button class="btn btn-primary float-sm-right">Add New Project</button></a>
+							</div>
+							<!-- /.card-header -->
+							<div class="card-body">
+								<table id="prjlist" class="table table-bordered table-striped">
+									<tr>
+										<th>Id</th>
+										<th>Name</th>
+										<th>Description</th>
+										<th>Status</th>
+										<th colspan="2">-</th>
+									</tr>
+								</table>
+							</div>
+							<!-- /.card-body -->
+						</div>
+						<!-- /.card -->
+					</div>
+					<!-- /.col -->
+				</div>
+				<!-- /.row -->
+			</div>
+		</section>
+
+	</div>
+	</div>
+	</div>
+
+	<footer class="main-footer" th:replace="fragments/footer :: footer"></footer>
+  
+  	<div th:replace="fragments/footer :: jsfoot"></div>
+
+
+	<script type="text/javascript">
+data = "";
+submit = function(){
+
+	$.ajax({
+		url:'saveOrUpdate',
+		type:'POST',
+		data:{user_id:$("#user_id").val(),user_name:$('#name').val(),email:$('#email').val()},
+		success: function(response){
+			alert(response.message);
+			load();
+		}
+	});
+}
+
+deleteProject_ = function(id){
+	$.ajax({
+		url:'deleteProject',
+		type:'POST',
+		data:{projectId:id},
+		success: function(response){
+			alert(response.message);
+			load();
+		}
+	});
+}
+
+edit = function (id){
+	$("#id").val(id);
+	$("#prjForm").submit();
+}
+
+load = function(){
+	$.ajax({
+		url:'all',
+		type:'POST',
+		success: function(response){
+			data = response.data;
+			$('.tr').remove();
+			for(i=0; i<response.data.length; i++){
+				$("#prjlist").append("<tr class='tr'> <td> "+response.data[i].projectId+" </td> <td> "+response.data[i].name+" </td> <td> "+response.data[i].description+" </td><td> "+response.data[i].statusStr+" </td> <td> <a href='#' onclick= edit("+response.data[i].projectId+");> View </a>  </td> </tr>");
+			}
+		}
+	});
+}
+
+load();
+</script>
+</body>
+</html>

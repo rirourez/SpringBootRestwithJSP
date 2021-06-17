@@ -2,7 +2,6 @@ package com.jsprest.entity;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.ReadOnlyProperty;
 
 import javax.persistence.*;
 
@@ -10,54 +9,38 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
-@Table(name="projects")
-public class Project implements Serializable {
+@Table(name="customers")
+public class Customer implements Serializable {
 
-	private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 1L;
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long projectId;
+    private Long id;
 
     private String name;
 
-    @Lob
-    private String description;
+    private String address;
+    
+    private String tel;
 
-    @CreationTimestamp
-    @ReadOnlyProperty
+    public String getTel() {
+		return tel;
+	}
+
+
+	public void setTel(String tel) {
+		this.tel = tel;
+	}
+
+
+	@CreationTimestamp
     private LocalDate createdAt;
 
     @UpdateTimestamp
     private LocalDate updatedAt;
 
-
     private boolean status;
-    
-    @ManyToOne
-    @JoinColumn(name="customer_id", nullable=false)
-    @ReadOnlyProperty
-    private Customer customer;
-
-
-    public Customer getCustomer() {
-		return customer;
-	}
-
-
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
-	}
-
-
-	public Long getProjectId() {
-        return projectId;
-    }
-
-
-    public void setProjectId(Long projectId) {
-        this.projectId = projectId;
-    }
 
 
     public String getName() {
@@ -105,20 +88,32 @@ public class Project implements Serializable {
     }
 
 
-    public String getDescription() {
-        return description;
-    }
+	public Long getId() {
+		return id;
+	}
 
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
+	public String getAddress() {
+		return address;
+	}
+
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
 
 
 	@Override
 	public String toString() {
-		return projectId + "";
+		return name+" [" + id + "]";
 	}
+
+
 
 
 }

@@ -3,6 +3,11 @@ package com.jsprest.controller;
 import com.jsprest.entity.Admin;
 import com.jsprest.entity.LoginModel;
 import com.jsprest.repository.AdminRepository;
+import com.jsprest.service.AdminService;
+import com.jsprest.service.ProjectService;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,19 +27,30 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class AdminController {
 
+	private static final Logger logger = LogManager.getLogger("AdminController");
+	
     @Autowired
-    AdminRepository arepo;
+    AdminService adminService;
+
+    @Autowired
+    ProjectService prjService;
+    
     @Autowired
     private BCryptPasswordEncoder encoder;
 
-    @RequestMapping("/homePage")
+    @RequestMapping("/home")
     public String home(Authentication auth, Model model) {
-    	System.out.println("home admin controller");
+    	logger.info("home "+auth);
         if (auth == null) {
-            return "reditect:/login";
+            //return "redirect:/login";
         }
-        System.out.println("home admin controller step 2");
-        model.addAttribute("nbreProjets", 142);
+        System.out.println("home admin controller step 2 "+auth);
+        
+        model.addAttribute("nbreProjets", prjService.countProjets());
+        model.addAttribute("tasksDone", 27);
+        model.addAttribute("users", 245);
+        model.addAttribute("uVisitors", 39);
+        
         return "index";
     }
 
@@ -68,20 +84,20 @@ public class AdminController {
 
     @RequestMapping(value = "/loginPagePost", method = RequestMethod.POST)
     public String loginPagePost(@ModelAttribute LoginModel loginModel, Authentication auth, final RedirectAttributes redirect) {
-    	System.out.println("login post admin controller");
+    	System.out.println("login post admin controller "+loginModel.getEmail());
 
         String email = loginModel.getEmail();
         String password = loginModel.getPassword();
 
-        Admin adminDetails = arepo.findByEmail(email);
+        Admin adminDetails = adminService.findByEmail(email);
 
 
         if (adminDetails == null) {
             redirect.addFlashAttribute("msg", "email id not found");
 
             return "redirect:/loginPage";
-        } else if (encoder.matches(loginModel.getPassword(), adminDetails.getPassword())) {
-            return "redirect:/homePage";
+        } else if (encoder.matches(password, adminDetails.getPassword())) {
+            return "redirect:/home";
         } else {
 
             redirect.addFlashAttribute("msg", "invalid credentials");
