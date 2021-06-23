@@ -21,12 +21,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Projects</h1>
+            <h1 class="m-0 text-dark">Users</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a th:href="@{/home}">Home</a></li>
-              <li class="breadcrumb-item active">Projects</li>
+              <li class="breadcrumb-item active">Users</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -40,23 +40,24 @@
 				<!-- Small boxes (Stat box) -->
 				<div class="row">
 					
-					<form th:action="@{/project/view}" id="prjForm">
+					<form th:action="@{/user/view}" id="userForm">
 						<input type="hidden" name="id" id="id">
 					</form>
 					<div class="col-12">
 						<div class="card">
 							<div class="card-header">
-								<h3 class="card-title">List projects</h3>
-								<a th:href="@{/project/add}">
-								<button class="btn btn-primary float-sm-right">Add New Project</button></a>
+								<h3 class="card-title">List users</h3>
+								<a th:href="@{/user/add}">
+								<button class="btn btn-primary float-sm-right">Add New user</button></a>
 							</div>
 							<!-- /.card-header -->
 							<div class="card-body">
-								<table id="prjlist" class="table table-bordered table-striped">
+								<table id="userlist" class="table table-bordered table-striped">
 									<tr>
 										<th>Id</th>
 										<th>Name</th>
-										<th>Description</th>
+										<th>Phone</th>
+										<th>Address</th>
 										<th>Status</th>
 										<th colspan="2">-</th>
 									</tr>
@@ -88,7 +89,7 @@ submit = function(){
 	$.ajax({
 		url:'saveOrUpdate',
 		type:'POST',
-		data:{user_id:$("#user_id").val(),user_name:$('#name').val(),email:$('#email').val()},
+		data:{userId:$("#userId").val(),user_name:$('#name').val(),email:$('#email').val()},
 		success: function(response){
 			alert(response.message);
 			load();
@@ -96,11 +97,11 @@ submit = function(){
 	});
 }
 
-deleteProject_ = function(id){
+deleteUser_ = function(id){
 	$.ajax({
-		url:'deleteProject',
+		url:'deleteUser',
 		type:'POST',
-		data:{projectId:id},
+		data:{userId:id},
 		success: function(response){
 			alert(response.message);
 			load();
@@ -110,7 +111,7 @@ deleteProject_ = function(id){
 
 edit = function (id){
 	$("#id").val(id);
-	$("#prjForm").submit();
+	$("#userForm").submit();
 }
 
 load = function(){
@@ -121,13 +122,17 @@ load = function(){
 			data = response.data;
 			$('.tr').remove();
 			for(i=0; i<response.data.length; i++){
-				$("#prjlist").append("<tr class='tr'> <td> "+response.data[i].projectId+" </td> <td> "+response.data[i].name+" </td> <td> "+response.data[i].description+" </td><td> "+response.data[i].statusStr+" </td> <td> <a href='#' onclick= edit("+response.data[i].projectId+");> View </a>  </td> </tr>");
+				$("#userlist").append("<tr class='tr'> <td> "+response.data[i].userId+" </td> <td> "+response.data[i].user_name+" </td> <td> "+response.data[i].phone+" </td> <td> "+response.data[i].address+" </td><td> "+response.data[i].etat+" </td> <td> <a href='#' onclick= edit("+response.data[i].userId+");> View </a>  </td> </tr>");
 			}
 		}
 	});
 }
 
-load();
+$( document ).ready(function() {
+    console.log( "ready .." );
+    load();
+});
+
 </script>
 </body>
 </html>

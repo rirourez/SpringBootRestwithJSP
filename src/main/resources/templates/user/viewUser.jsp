@@ -44,7 +44,7 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="index.jsp" class="nav-link">Home</a>
+        <a href="index3.html" class="nav-link">Home</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
         <a href="#" class="nav-link">Contact</a>
@@ -233,6 +233,12 @@
                   <p>Projects</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="${pageContext.request.contextPath}/addProject" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p> Add Project</p>
+                </a>
+              </li>
               
             </ul>
           </li>
@@ -260,7 +266,29 @@
               
             </ul>
           </li>
-          
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-tree"></i>
+              <p>
+               Users
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="${pageContext.request.contextPath}/viewUser" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Users</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="${pageContext.request.contextPath}/addUser" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Add User</p>
+                </a>
+              </li>
+              
+            </ul>
           </li>
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
@@ -601,11 +629,11 @@
         <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">All Task
+                <h3 class="card-title">All Users
                 
                 
                 </h3>
-                                                          <button class="btn btn-primary float-sm-right" onclick="window.location.href='/admin/addTask';">Add Task</button>
+                                                          <button class="btn btn-primary float-sm-right" onclick="window.location.href='/admin/addUser';">Add Task</button>
                 
               </div>
               <!-- /.card-header -->
@@ -617,13 +645,9 @@
 <tr> 
 <th> Id </th> 
 <th> Name </th> 
-<th> Description </th>
-<th> Creation Time </th>
+<th> Phone </th>
+<th> Address </th>
 <th> Status </th>
-
-<th> Expired </th>
- <th> Edit </th> 
- <th> Delete </th> 
  </tr>
 
 </table>
@@ -755,9 +779,9 @@ load();
 
 deleteTask_ = function(id){
 $.ajax({
-url:'deleteTask',
+url:'deleteUser',
 type:'POST',
-data:{taskId:id},
+data:{userId:id},
 success: function(response){
 alert(response.message);
 load();
@@ -776,13 +800,13 @@ $("#email").val(data[index].email);
 
 load = function(){
 $.ajax({
-url:'allTask',
+url:'allUser',
 type:'POST',
 success: function(response){
 data = response.data;
 $('.tr').remove();
 for(i=0; i<response.data.length; i++){
-$("#example1").append("<tr class='tr'> <td> "+response.data[i].taskId+" </td> <td> "+response.data[i].name+" </td> <td> "+response.data[i].description+" </td> <td> "+response.data[i].createdAt+" </td>  <td> "+response.data[i].status+" </td> <td> "+response.data[i].isExpired+" </td> <td> <a href='#' onclick= edit("+response.data[i].taskId+");> Edit </a>  </td> </td> <td> <a href='#' onclick='deleteTask_("+response.data[i].taskId+");'> Delete </a>  </td> </tr>");
+$("#example1").append("<tr class='tr'> <td> "+response.data[i].userId+" </td> <td> "+response.data[i].name+" </td> <td> "+response.data[i].phone+" </td> <td> "+response.data[i].address+" </td>  <td> "+response.data[i].status+" </td>  <td> <a href='#' onclick= edit("+response.data[i].userId+");> Edit </a>  </td> </td> <td> <a href='#' onclick='deleteUser_("+response.data[i].userId+");'> Delete </a>  </td> </tr>");
 }
 }
 });

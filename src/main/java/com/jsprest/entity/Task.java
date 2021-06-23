@@ -118,5 +118,8 @@ public class Task implements Serializable {
         this.description = description;
     }
 
-
+    @Override
+	public String toString() {
+		return taskId + "";
+	}
 }

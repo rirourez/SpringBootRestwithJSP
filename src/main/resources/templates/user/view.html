@@ -21,12 +21,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Projects</h1>
+            <h1 class="m-0 text-dark">Users</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a th:href="@{/home}">Home</a></li>
-              <li class="breadcrumb-item active">View project</li>
+              <li class="breadcrumb-item active">View User</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -40,18 +40,18 @@
 				<!-- Small boxes (Stat box) -->
 				<div class="row">
 					
-					<form th:action="@{/project/edit}" id="prjForm">
+					<form th:action="@{/user/edit}" id="userForm">
 						<input type="hidden" name="id" id="id">
 						<input type="hidden" name="action" id="action">
 					</form>
 					<div class="col-12">
 						<div class="card">
 							<div class="card-header">
-								<h3 class="card-title" th:text="'View project details ['+${project.projectId}+']'">...</h3>
+								<h3 class="card-title" th:text="'View user details ['+${user.userId}+']'">...</h3>
 								<button class="btn btn-primary float-sm-right"
-									th:onclick="'return del('+${project.projectId}+');'" th:if="${#lists.isEmpty(tasks)}">Delete project</button> | 
+									th:onclick="'return del('+${user.userId}+');'" th:if="${#lists.isEmpty(users)}">Delete User</button> | 
 								<button class="btn btn-primary float-sm-right"
-									th:onclick="'edit('+${project.projectId}+');'">Edit project</button> 
+									th:onclick="'edit('+${user.userId}+');'">Edit user</button> 
 								
 							</div>
 							<!-- /.card-header -->
@@ -60,58 +60,35 @@
 <table>    
 <tr>    
 	<td><h4>Name: </h4></td>    
-	<td><h4 th:text="${project.name}"></h4></td>    
-</tr>
+	<td><h4 th:text="${user.user_name}"></h4></td>    
+</tr>  
 <tr>    
-	<td><h4>Customer: </h4></td>    
-	<td><h4 th:text="${project.customer}"></h4></td>    
-</tr>    
-<tr>    
-	<td><h4>Description: </h4></td>    
-	<td><h4 th:text="${project.description}"></h4></td>    
+	<td><h4>Phone: </h4></td>    
+	<td><h4 th:text="${user.phone}"></h4></td>    
 </tr>   
 <tr>    
-	<td><h4>Status: </h4></td>    
-	<td><h4 th:text="${project.statusStr}"></h4></td>    
+	<td><h4>Address: </h4></td>    
+	<td><h4 th:text="${user.address}"></h4></td>    
 </tr> 
 <tr>    
-	<td><h4>Created at: </h4></td>    
-	<td><h4 th:text="${project.createdAt}"></h4></td>    
+	<td><h4>:Status </h4></td>    
+	<td><h4 th:text="${user.etat}"></h4></td>    
 </tr>
 </table> 
 <hr>
-	<h3>Project tasks [<span th:text="${#lists.size(tasks)}">...</span>]:</h3>
 
-	<table id="tasks" class="table table-bordered table-striped">
-		<tr> 
-			<th> Id </th> 
-			<th> Name </th> 
-			<th> Description </th>
-			<th> Creation Time </th>
-			<th> Status </th>
-			<th> Expired </th>
-		</tr>
- 		<tr th:each="task : ${tasks}">
-             <td th:text="${task.taskId}"></td>
-             <td th:text="${task.name}"></td>
-             <td th:text="${task.description}"></td>
-             <td th:text="${task.createdAt}"></td>
-             <td th:text="${task.status}"></td>
-             <td th:text="${task.expired}"></td>
-        </tr>
-	</table>
    
 <script type="text/javascript">
 	edit = function (id) {
 		$("#id").val(id);
 		$("#action").val('edit');
-		$("#prjForm").submit();
+		$("#userForm").submit();
 	}
 	del = function (id) {
-		if (confirm('Are you sure to delete this project?')) {
+		if (confirm('Are you sure to delete this user?')) {
 			$("#id").val(id);
 			$("#action").val('del');
-			$("#prjForm").submit();
+			$("#userForm").submit();
 		} else {
 			return false;
 		}

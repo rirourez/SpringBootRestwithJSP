@@ -1,16 +1,21 @@
 package com.jsprest.entity;
 
 import javax.persistence.*;
+
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class Users {
-    @Id
+public class User implements Serializable {
+	
+	private static final long serialVersionUID = 1541L;
+
+	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "user_id")
-    private Integer user_id;
+    @Column(name = "userId")
+    private Integer userId;
 
     @Column(name = "user_name")
     private String user_name;
@@ -58,18 +63,18 @@ public class Users {
 
 	@ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
+            joinColumns = @JoinColumn(name = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "roleId"))
 
     private Set<Role> role = new HashSet<>();
 
 
-    public Integer getUser_id() {
-        return user_id;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setUser_id(Integer user_id) {
-        this.user_id = user_id;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public String getUser_name() {
@@ -111,5 +116,8 @@ public class Users {
     public void setRole(Set<Role> role) {
         this.role = role;
     }
-
-}
+    @Override
+    public String toString() {
+		return userId + "";
+	}
+	}

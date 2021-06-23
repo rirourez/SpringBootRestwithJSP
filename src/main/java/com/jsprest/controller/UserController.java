@@ -1,27 +1,43 @@
 package com.jsprest.controller;
 
-import com.jsprest.entity.Users;
+import com.jsprest.entity.Project;
+import com.jsprest.entity.Task;
+import com.jsprest.entity.User;
 import com.jsprest.service.UsersService;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
+
+import javax.validation.Valid;
 
 @Controller
 public class UserController {
 
-	// Logger logger = LoggerFactory.getLogger("UserController");
+	private static final Logger logger = LogManager.getLogger("UserController");
 
 	@Autowired
-	UsersService userServices;
+	UsersService userService;
+
+	@RequestMapping("/user/list")
+	public String list(Authentication auth, Model model) {
+		logger.info("list "+auth);
+		return "user/list";
+	}
 
 	@RequestMapping(value = "/page", method = RequestMethod.GET)
 	public ModelAndView getPage() {
@@ -29,31 +45,51 @@ public class UserController {
 		return view;
 	}
 
-	@RequestMapping(value = "/viewUser", method = RequestMethod.GET)
-	public String getPage11() {
-		System.out.println("home user controller");
-		return "user/home";
+	@RequestMapping(value = "/user/view", method = RequestMethod.GET)
+	public String view(@RequestParam Integer id, Authentication auth, Model model) {
+		logger.info("view, " + id);
+
+		User u = userService.getUser(id);
+		if (u == null)
+			return list(auth, model);
+		model.addAttribute("user", u);
+		return "user/view";
 	}
 
-	@RequestMapping(value = "/addUser", method = RequestMethod.GET)
-	public String addUser() {
+	@RequestMapping(value = "/user/edit")
+	public String edit(@RequestParam Integer id, @RequestParam String action, Authentication auth, Model model) {
+		logger.info("edit, " + id + ", " + action);
 
-		return "user/addUser";
+		User u = userService.getUser(id);
+		if (u == null)
+			return list(auth, model);
+
+		if ("del".equals(action)) {
+			userService.delete(u);
+			return list(auth, model);
+		}
+		model.addAttribute("user", u);
+		return "user/edit";
 	}
 
-	@RequestMapping(value = "/saveOrUpdate", method = RequestMethod.GET)
-	public String getAllUsers(Users users) {
-
-		List<Users> list = userServices.list();
-
-		return list.toString();
-	}
+	@RequestMapping(value = "/user/add")
+    public String add(@RequestParam(required = false) String action, User user, Authentication auth, Model model) {
+    	logger.info("add, "+action);
+    	if (user == null)	user = new User();
+    	
+    	if ("save".equals(action)) {
+    		user = userService.save(user);
+    		return view(user.getUserId(), auth, model);
+    	}
+    	model.addAttribute("user", user);
+        return "user/add";
+    }
 
 	@RequestMapping(value = "/saveOrUpdate", method = RequestMethod.POST)
-	public @ResponseBody Map<String, Object> getSaved(Users users) {
+	public @ResponseBody Map<String, Object> getSaved(User user) {
 		Map<String, Object> map = new HashMap<String, Object>();
 
-		userServices.saveOrUpdate(users);
+		userService.saveOrUpdate(user);
 		map.put("status", "200");
 		map.put("message", "Your record have been saved successfully");
 
@@ -61,31 +97,55 @@ public class UserController {
 		return map;
 	}
 
-	@RequestMapping(value = "/list", method = RequestMethod.POST)
-	public @ResponseBody Map<String, Object> getAll(Users users) {
+	@RequestMapping(value = "/user/all", method = RequestMethod.POST)
+	public @ResponseBody Map<String, Object> getAll() {
+		logger.info("get all");
 		Map<String, Object> map = new HashMap<String, Object>();
 
-		List<Users> list = userServices.list();
+		List<User> allUsers = userService.list();
 
-		if (list != null) {
+		if (allUsers != null) {
 			map.put("status", "200");
 			map.put("message", "Data found");
-			map.put("data", list);
+			map.put("data", allUsers);
 		} else {
 			map.put("status", "404");
-			map.put("message", "Data not found");
-
+			map.put("message", "User not found");
 		}
-
 		System.out.println(map);
 		return map;
 	}
 
+	@PostMapping("/user/update")
+	public String update(@Valid User user, BindingResult result, Authentication auth, Model model) {
+		logger.info("update, " + user);
+		if (result.hasErrors()) {
+
+			if (user == null)
+				return list(auth, model);
+
+			model.addAttribute("user", user);
+
+			return view(user.getUserId(), auth, model);
+		}
+		User u = userService.getUser(user.getUserId());
+		if (u != null) {
+			u.setUser_name(user.getUser_name());
+			u.setPhone(user.getPhone());
+			u.setAddress(user.getAddress());
+			u.setEtat(user.getEtat());
+			userService.save(u);
+		} else {
+			userService.save(user);
+		}
+		return view(user.getUserId(), auth, model);
+	}
+
 	@RequestMapping(value = "/deleteUser", method = RequestMethod.POST)
-	public @ResponseBody Map<String, Object> delete(Users users) {
+	public @ResponseBody Map<String, Object> delete(User users) {
 		Map<String, Object> map = new HashMap<String, Object>();
 
-		userServices.delete(users);
+		userService.delete(users);
 		map.put("status", "200");
 		map.put("message", "Your record have been deleted successfully");
 

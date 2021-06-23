@@ -38,7 +38,7 @@
                 <div class="card-footer">
                   <button type="submit"  class="btn btn-primary" onclick="submit();">Submit</button>
                   
-                  <button class="btn btn-primary" onclick="window.location.href='/admin/viewTask';">View Task</button>
+                  <button class="btn btn-primary" onclick="window.location.href='/admin/ViewTask';">View Task</button>
                   
                 </div>
              <!--  </form> -->
@@ -73,10 +73,7 @@ submit = function(){
 $.ajax({
 url:'saveTask',
 type:'POST',
-data:{taskId:$("#taskId").val(),
-	name:$('#name').val(),
-	description:$('#description').val()
-	},
+data:{taskId:$("#taskId").val(),name:$('#name').val(),description:$('#description').val()},
 success: function(response){
 alert(response.message);
 load();

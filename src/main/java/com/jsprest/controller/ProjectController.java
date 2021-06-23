@@ -35,8 +35,8 @@ public class ProjectController {
 
 	private static final Logger logger = LogManager.getLogger("ProjectController");
 	
-    //@Autowired
-    //private ProjectRepository projectRepository;
+    @Autowired
+    private ProjectRepository projectRepository;
     
 	@Autowired
     CustomerService customService;
@@ -80,7 +80,7 @@ public class ProjectController {
     		return list(auth, model);
     	}
     	model.addAttribute("project", p);
-    	//model.addAttribute("tasks", taskService.getProjectTasks(id));
+    	model.addAttribute("tasks", taskService.getProjectTasks(id));
         return "project/edit";
     }
     
@@ -128,7 +128,7 @@ public class ProjectController {
     Map<String, Object> getSaved(Project project) {
         Map<String, Object> map = new HashMap<String, Object>();
 
-        //projectRepository.save(project);
+        projectRepository.save(project);
         map.put("status", "200");
         map.put("message", "Project has been saved successfully");
 

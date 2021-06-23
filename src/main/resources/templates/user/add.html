@@ -21,12 +21,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Projects</h1>
+            <h1 class="m-0 text-dark">Users</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a th:href="@{/home}">Home</a></li>
-              <li class="breadcrumb-item active">Add new project</li>
+              <li class="breadcrumb-item active">Add new User</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -40,56 +40,61 @@
 				<!-- Small boxes (Stat box) -->
 				<div class="row">
 					
-					<form th:action="@{/project/edit}" id="prjForm">
+					<form th:action="@{/user/edit}" id="userForm">
 						<input type="hidden" name="id" id="id">
 					</form>
 					<div class="col-12">
 						<div class="card">
 							<div class="card-header">
-								<h3 class="card-title">Add new project</h3>
+								<h3 class="card-title">Add new User</h3>
 							</div>
 							<!-- /.card-header -->
 							<div class="card-body">
 																
-<form action="#" th:action="@{/project/add}" th:object="${project}" method="post">
-	<input type="hidden" th:field="*{projectId}" id="id">
+<form action="#" th:action="@{/user/add}" th:object="${user}" method="post">
+	<input type="hidden" th:field="*{userId}" id="id">
 	<input type="hidden" name="action" value="save" id="action">
 	
-    <div class="form-group">
-    	<label for="name">Customer</label>
-    	<select th:field="*{customer}" id="customer">
-    		<option value=""></option>
-    		<option th:each="c: ${customers}" th:value="${c.id}" th:text="${c.name}" />
-    	</select>
-    	<span th:if="${#fields.hasErrors('customer')}" th:errors="*{customer}"></span>
-    </div>
+
     <div class="form-group">
     	<label for="name">Name</label>
-    	<input type="text" th:field="*{name}" id="name" placeholder="Name">
-    	<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+    	<input type="text" th:field="*{user_name}" id="name" placeholder="Name">
+    	<span th:if="${#fields.hasErrors('user_name')}" th:errors="*{user_name}"></span>
     </div>
     <div class="form-group">
-	    <label for="description">Description</label>
-	    <input type="text" th:field="*{description}" id="email" placeholder="Description">
-	    <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+	    <label for="Email">Email</label>
+	    <input type="text" th:field="*{Email}" id="email" placeholder="Email">
+	    <span th:if="${#fields.hasErrors('Email')}" th:errors="*{Email}"></span>
 	</div>
+	 <div class="form-group">
+	    <label for="phone">Phone</label>
+	    <input type="text" th:field="*{phone}" id="phone" placeholder="Phone">
+	    <span th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></span>
+	</div>
+	 <div class="form-group">
+	    <label for="address">Address</label>
+	    <input type="text" th:field="*{address}" id="address" placeholder="Address">
+	    <span th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></span>
+	</div>
+	
 	<div class="form-group">
-	    <label for="status">Status</label>
-	    <select th:field="*{status}" id="status">
-	    	<option value="true">true</option>
-	    	<option value="false">false</option>
+	    <label for="etat">Status</label>
+	    <select th:field="*{etat}" id="etat">
+	    	<option value="0">En attente</option>
+	    	<option value="1">Actif</option>
+	    	<option value="2">Bloqué</option>
 	    </select>
-	    <span th:if="${#fields.hasErrors('status')}" th:errors="*{status}"></span>
+	    <span th:if="${#fields.hasErrors('etat')}" th:errors="*{etat}"></span>
 	</div>
     <div class="form-group">
-    	<input type="submit" value="Save project">
+    	<input type="submit" value="Save user">
     </div>   
 </form>
    
 <script type="text/javascript">
 edit = function (id) {
 	$("#id").val(id);
-	$("#prjForm").submit();
+	$("#taskForm").submit();
 }
 </script>
 								

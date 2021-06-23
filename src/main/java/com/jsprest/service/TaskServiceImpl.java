@@ -45,4 +45,20 @@ public class TaskServiceImpl implements TaskService {
 		if (o == null || o.isEmpty())		return null;
 		return o.get();
 	}
+public List<Task> getTasks() {
+		
+		List<Task> t = taskRepo.findAll();
+		return t;
+}
+	@Override
+	public Task save(Task t) {
+		if (t == null)					return null;
+		return taskRepo.save(t);
+	}
+
+	@Override
+	public void delete(Task t) {
+		if (t == null)					return;
+		taskRepo.deleteById(t.getTaskId());
+	}
 }

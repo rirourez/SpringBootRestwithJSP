@@ -1,13 +1,22 @@
 package com.jsprest.service;
 
-import com.jsprest.entity.Users;
+import com.jsprest.entity.User;
 
 import java.util.List;
 
 public interface UsersService {
-    Users saveOrUpdate(Users users);
+	
+    User saveOrUpdate(User u);
 
-    List<Users> list();
-
-    void delete(Users users);
+    void delete(User u);
+    
+    public long countusers();
+	
+	
+	public User getUser(Integer id);
+	
+	public User save(User u);
+	
+	public List<User> list();
+	
 }
